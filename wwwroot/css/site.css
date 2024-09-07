@@ -20,3 +20,25 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+table {
+  margin: 2%;
+  border: solid black 2px;
+  width: 96%;
+  height: 96%;
+  background-color: black;
+}
+td {
+  margin: 2%;
+  width: 96%;
+  height: 96%;
+  border: solid black 2px;
+  background-color: #CCCCCC;
+}
+#graphcanvas {
+  position: relative;
+  margin: 1%;
+  width: 98%;
+  height: 98%;
+  border: solid black 2px;
+}
