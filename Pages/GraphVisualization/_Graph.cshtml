@@ -1,0 +1,39 @@
+@using GraphAlgorithmsAndVisualization.Models
+@model GraphModel
+
+<table>
+    <tr>
+        <td colspan="5">
+
+        </td>
+        <td colspan="5">
+
+        </td>
+    </tr>
+    <tr>
+        <td colspan="10">
+            <form method="post">
+                <canvas id="graphcanvas" tabindex="1"/>
+                <input id="graphcanvasx" type="text" hidden value="" asp-for="@Model.X"/>
+                <input id="graphcanvasy" type="text" hidden value="" asp-for="@Model.Y"/>
+                <input id="graphcanvasbtn" asp-page-handler="GraphCanvasClick" hidden type="submit" value="submit"/>
+            </form>
+        </td>
+    </tr>
+</table>
+
+<script type="text/javascript">
+document.getElementById("graphcanvas").addEventListener("mousedown", function(e){GraphCanvasClick(e);});
+function GraphCanvasClick(e)
+{
+    e = e || window.event;
+    var gc = document.getElementById("graphcanvas");
+    var rect = gc.getBoundingClientRect();
+    var x = (e.clientX - rect.left) * gc.width / rect.width;
+    var y = (e.clientY - rect.top) * gc.height / rect.height;
+    document.getElementById("graphcanvasx").value = x.toString();
+    document.getElementById("graphcanvasy").value = y.toString();
+    document.getElementById("graphcanvasbtn").click();
+}
+</script>
+

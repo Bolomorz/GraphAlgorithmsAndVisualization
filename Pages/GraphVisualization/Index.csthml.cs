@@ -1,3 +1,4 @@
+using GraphAlgorithmsAndVisualization.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -8,21 +9,20 @@ public class IndexModel : PageModel
 
     #region AspForFields
     [BindProperty]
-    public string X { get; set; }
-    [BindProperty]
-    public string Y { get; set; }
+    public GraphModel GraphModel { get; set; }
     #endregion
     public IndexModel()
     {
+        GraphModel = new(){ X = "", Y = ""};
     }
 
     public void OnGet()
     {
-
+        
     }
 
     public void OnPostGraphCanvasClick()
     {
-        Console.WriteLine("{0}|{1}", X, Y);
+        Console.WriteLine("{0}|{1}", GraphModel.X, GraphModel.Y);
     }
 }

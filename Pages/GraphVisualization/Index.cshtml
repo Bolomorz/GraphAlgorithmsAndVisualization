@@ -1,4 +1,5 @@
 @page
+@using GraphAlgorithmsAndVisualization.Models
 @model GraphAlgorithmsAndVisualization.Pages.GraphVisualization.IndexModel
 @{
     ViewData["Title"] = "Home page";
@@ -6,40 +7,6 @@
 
 <div class="text-center">
     <h1 class="display-4">Graph Visualization</h1>
-    <table>
-        <tr>
-            <td colspan="5">
-
-            </td>
-            <td colspan="5">
-
-            </td>
-        </tr>
-        <tr>
-            <td colspan="10">
-                <form method="post">
-                    <canvas id="graphcanvas" tabindex="1"/>
-                    <input id="graphcanvasx" hidden value="" asp-for="@Model.X"/>
-                    <input id="graphcanvasy" hidden value="" asp-for="@Model.Y"/>
-                    <input id="graphcanvasbtn" asp-page-handler="GraphCanvasClick" hidden type="submit" value="submit"/>
-                </form>
-            </td>
-        </tr>
-    </table>
+    <partial name="/Pages/GraphVisualization/_Graph.cshtml" for="@Model.GraphModel"/>
 </div>
-
-<script type="text/javascript">
-document.getElementById("graphcanvas").addEventListener("mousedown", function(e){GraphCanvasClick(e);});
-function GraphCanvasClick(e)
-{
-    e = e || window.event;
-    var gc = document.getElementById("graphcanvas");
-    var rect = gc.getBoundingClientRect();
-    var x = (e.clientX - rect.left) * gc.width / rect.width;
-    var y = (e.clientY - rect.top) * gc.height / rect.height;
-    document.getElementById("graphcanvasx").value = x;
-    document.getElementById("graphcanvasy").value = y;
-    document.getElementById("graphcanvasbtn").click();
-}
-</script>
 
