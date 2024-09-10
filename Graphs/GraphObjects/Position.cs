@@ -6,9 +6,9 @@ namespace GraphAlgorithmsAndVisualization.Graphs;
 internal class Position
 {
     [DataMember]
-    internal required int X { get; set; } = 0;
+    internal required double X { get; set; } = 0;
     [DataMember]
-    internal required int Y { get; set; } = 0;
+    internal required double Y { get; set; } = 0;
 
     public override string ToString() => string.Format("[{0}|{1}]", X, Y);
 }

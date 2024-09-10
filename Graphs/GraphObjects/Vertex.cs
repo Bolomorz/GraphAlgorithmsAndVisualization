@@ -16,10 +16,10 @@ internal class Vertex
 
     protected static int num = 0;
 
-    internal Vertex(string name, Position position)
+    internal Vertex(Position position)
     {
         Id = num++;
-        Name = name;
+        Name = "vertex" + Id;
         Position = position;
         Adjacents = new();
     }

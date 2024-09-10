@@ -32,16 +32,16 @@ internal class Graph
 
     internal void AddVertex(Vertex vertex)
     {
-        if(Vertices.First(k => k.Id == vertex.Id) is null) Vertices.Add(vertex);
+        if(Vertices.FirstOrDefault(k => k.Id == vertex.Id) is null) Vertices.Add(vertex);
     }
     internal void RemoveEdge(Edge edge)
     {
-        var oldedge = Edges.First(k => k.Id == edge.Id);
+        var oldedge = Edges.FirstOrDefault(k => k.Id == edge.Id);
         if(oldedge is not null) Edges.Remove(oldedge);
     }
     internal void RemoveVertex(Vertex vertex)
     {
-        var oldvertex = Vertices.First(k => k.Id == vertex.Id);
+        var oldvertex = Vertices.FirstOrDefault(k => k.Id == vertex.Id);
         if(oldvertex is not null)
         {
             foreach(var edge in Edges) if(oldvertex.Id == edge.Vertex1.Id || oldvertex.Id == edge.Vertex2.Id) RemoveEdge(edge);

@@ -1,5 +1,6 @@
-@page
+@page 
 @using GraphAlgorithmsAndVisualization.Models
+@using GraphAlgorithmsAndVisualization.Visualization;
 @model GraphAlgorithmsAndVisualization.Pages.GraphVisualization.IndexModel
 @{
     ViewData["Title"] = "Home page";
@@ -7,6 +8,10 @@
 
 <div class="text-center">
     <h1 class="display-4">Graph Visualization</h1>
-    <partial name="/Pages/GraphVisualization/_Graph.cshtml" for="@Model.GraphModel"/>
+    @switch(@VisualizationGlobal.CurrentPartial)
+    {
+        case Models.Partial.Graph:
+        <partial name="/Pages/GraphVisualization/_Graph.cshtml" for="@Model.GraphModel"/>
+        break;
+    }
 </div>
-

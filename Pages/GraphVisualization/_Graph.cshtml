@@ -1,6 +1,7 @@
 @using GraphAlgorithmsAndVisualization.Models
+@using GraphAlgorithmsAndVisualization.Visualization
+@using System.Drawing
 @model GraphModel
-
 <table>
     <tr>
         <td colspan="5">
@@ -21,13 +22,16 @@
         </td>
     </tr>
 </table>
-
 <script type="text/javascript">
-document.getElementById("graphcanvas").addEventListener("mousedown", function(e){GraphCanvasClick(e);});
+var gc = document.getElementById("graphcanvas");
+var rect = gc.getBoundingClientRect();
+gc.width = rect.width * 4;
+gc.height = rect.height * 4;
+var ctx = gc.getContext("2d");
+gc.addEventListener("mousedown", function(e){GraphCanvasClick(e);});
 function GraphCanvasClick(e)
 {
     e = e || window.event;
-    var gc = document.getElementById("graphcanvas");
     var rect = gc.getBoundingClientRect();
     var x = (e.clientX - rect.left) * gc.width / rect.width;
     var y = (e.clientY - rect.top) * gc.height / rect.height;
@@ -35,5 +39,47 @@ function GraphCanvasClick(e)
     document.getElementById("graphcanvasy").value = y.toString();
     document.getElementById("graphcanvasbtn").click();
 }
+function ClearCanvas()
+{
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, gc.width, gc.height);
+}
+function DrawCircle(color, x, y, radius)
+{
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
+    ctx.stroke();
+}
+function DrawText(color, x, y, text, font)
+{
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    ctx.font = font + "px FreeMono";
+    ctx.textAlign = "center";
+    ctx.fillText(text, x, y);
+}
 </script>
+
+@if(@Model.Canvas is not null)
+{
+    <script type="text/javascript">ClearCanvas()</script>
+    foreach(var circle in Model.Canvas.CircleElements)
+    {
+        if(circle.Color == Color.Blue){ <script type="text/javascript">DrawCircle("blue", @circle.Center.X, @circle.Center.Y, @circle.Radius)</script>}
+        else { <script type="text/javascript">DrawCircle("black", @circle.Center.X, @circle.Center.Y, @circle.Radius)</script> }
+    }
+    foreach(var text in Model.Canvas.TextElements)
+    {
+        var size = VisualizationSettings.GetTextSize(text.Text);
+        var x = text.Position.X;
+        var y = text.Position.Y + size.height/2;
+        var t = text.Text;
+        if(text.Color == Color.Blue){ <script type="text/javascript">DrawText("blue", @x, @y, "@t", @VisualizationSettings.FontSize)</script> }
+        else { <script type="text/javascript">DrawText("black", @x, @y, "@t", @VisualizationSettings.FontSize)</script> }
+    }
+}
+
 

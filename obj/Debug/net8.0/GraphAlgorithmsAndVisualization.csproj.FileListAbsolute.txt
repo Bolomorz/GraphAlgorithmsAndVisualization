@@ -29,3 +29,8 @@
 /mnt/LinuxPartition/Repositories/GraphAlgorithmsAndVisualization/obj/Debug/net8.0/GraphAlgorithmsAndVisualization.pdb
 /mnt/LinuxPartition/Repositories/GraphAlgorithmsAndVisualization/obj/Debug/net8.0/GraphAlgorithmsAndVisualization.genruntimeconfig.cache
 /mnt/LinuxPartition/Repositories/GraphAlgorithmsAndVisualization/obj/Debug/net8.0/ref/GraphAlgorithmsAndVisualization.dll
+/mnt/LinuxPartition/Repositories/GraphAlgorithmsAndVisualization/bin/Debug/net8.0/SixLabors.Fonts.dll
+/mnt/LinuxPartition/Repositories/GraphAlgorithmsAndVisualization/bin/Debug/net8.0/SixLabors.ImageSharp.dll
+/mnt/LinuxPartition/Repositories/GraphAlgorithmsAndVisualization/bin/Debug/net8.0/SixLabors.ImageSharp.Drawing.dll
+/mnt/LinuxPartition/Repositories/GraphAlgorithmsAndVisualization/obj/Debug/net8.0/GraphAlgorithmsAndVisualization.csproj.AssemblyReference.cache
+/mnt/LinuxPartition/Repositories/GraphAlgorithmsAndVisualization/obj/Debug/net8.0/GraphAlgorithmsAndVisualization.csproj.CopyComplete
