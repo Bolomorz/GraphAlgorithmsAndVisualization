@@ -6,10 +6,10 @@
     <tr>
         <form method="post">
             <td colspan="1">
-                <input type="text" placeholder="enter help for help" asp-for="@Model.Command"/>
+                <input id="commandbox" type="text" placeholder="enter help for help" asp-for="@Model.Command"/>
             </td>
             <td colspan="1">
-                <input type="submit" asp-page-handler="IssueCommand" value="Issue Command"/>
+                <input id="commandbtn" type="submit" asp-page-handler="IssueCommand" value="Issue Command"/>
             </td>
         </form>
     </tr>
@@ -35,6 +35,11 @@ var ctx = gc.getContext("2d");
 gc.addEventListener("mousedown", function(e){GraphCanvasClick(e);});
 gc.addEventListener("keydown", function(e){GraphCanvasKeyDown(e);});
 gc.focus();
+document.getElementById("commandbox").addEventListener("keydown", function(e){
+    e = e || window.event;
+    var key = e.key;
+    if(key == "Enter") document.getElementById("commandbtn").click();
+});
 function GraphCanvasClick(e)
 {
     e = e || window.event;
@@ -103,7 +108,7 @@ function DrawArrow(color, x1, y1, x2, y2, x3, y3)
     <script type="text/javascript">ClearCanvas()</script>
     foreach(var circle in Model.Canvas.CircleElements)
     {
-        if(circle.Color == Color.Blue){ <script type="text/javascript">DrawCircle("blue", @circle.Center.X, @circle.Center.Y, @circle.Radius)</script>}
+        if(circle.Color == Color.Blue){ <script type="text/javascript">DrawCircle("blue", @circle.Center.X, @circle.Center.Y, @circle.Radius)</script> }
         else { <script type="text/javascript">DrawCircle("black", @circle.Center.X, @circle.Center.Y, @circle.Radius)</script> }
     }
     foreach(var text in Model.Canvas.TextElements)

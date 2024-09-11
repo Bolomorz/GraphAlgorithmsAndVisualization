@@ -32,12 +32,7 @@ public class IndexModel : PageModel
         switch(VisualizationGlobal.CurrentPartial)
         {
             case Models.Partial.Solution:
-            if(VisualizationGlobal.CurrentCanvasGraph is not null)
-            {
-                var canvas = VisualizationGlobal.CurrentCanvasGraph.DrawCanvas();
-                GraphModel.Canvas = canvas;
-            }
-            VisualizationGlobal.CurrentPartial = Models.Partial.Graph;
+            DisplayGraph();
             return Page();
             default:
             VisualizationGlobal.CurrentPartial = Models.Partial.Graph;
@@ -51,8 +46,7 @@ public class IndexModel : PageModel
         {
             Position pos = new(){ X = Convert.ToDouble(GraphModel.X), Y = Convert.ToDouble(GraphModel.Y)};
             var cmd = VisualizationGlobal.CurrentCanvasGraph.HandleLeftClick(pos);
-            var canvas = VisualizationGlobal.CurrentCanvasGraph.DrawCanvas();
-            GraphModel.Canvas = canvas;
+            DisplayGraph();
         }
         return Page();
     }
@@ -63,8 +57,7 @@ public class IndexModel : PageModel
         {
             Position pos = new(){ X = Convert.ToDouble(GraphModel.X), Y = Convert.ToDouble(GraphModel.Y) };
             VisualizationGlobal.CurrentCanvasGraph.HandleRightClick(pos);
-            var canvas = VisualizationGlobal.CurrentCanvasGraph.DrawCanvas();
-            GraphModel.Canvas = canvas;
+            DisplayGraph();
         }
         return Page();
     }
@@ -74,8 +67,7 @@ public class IndexModel : PageModel
         if(VisualizationGlobal.CurrentCanvasGraph is not null)
         {
             VisualizationGlobal.CurrentCanvasGraph.HandleDelete();
-            var canvas = VisualizationGlobal.CurrentCanvasGraph.DrawCanvas();
-            GraphModel.Canvas = canvas;
+            DisplayGraph();
         }
         return Page();
     }
@@ -90,5 +82,15 @@ public class IndexModel : PageModel
             VisualizationGlobal.CurrentPartial = Models.Partial.Solution;
         }
         return Page();
+    }
+
+    private void DisplayGraph()
+    {
+        if(VisualizationGlobal.CurrentCanvasGraph is not null)
+        {
+            var canvas = VisualizationGlobal.CurrentCanvasGraph.DrawCanvas();
+            GraphModel.Canvas = canvas;
+        }
+        VisualizationGlobal.CurrentPartial = Models.Partial.Graph;
     }
 }

@@ -62,23 +62,10 @@ body {
   top: 0;
   z-index: 1;
 }
-.solution th, .solution td {
-  padding: 12px 15px;
-}
 .solution tbody td {
   text-align: left;
 }
 .solution tbody tr {
   border-bottom: 1px solid #dddddd;
-}
-.solution tbody tr:nth-of-type(even) {
-  background-color: #6970c7;
-}
-
-.solution tbody tr:nth-of-type(odd) {
   background-color: #1421d1;
-}
-
-.solution tbody tr:last-of-type {
-  border-bottom: 2px solid rgb(13, 211, 211);
 }

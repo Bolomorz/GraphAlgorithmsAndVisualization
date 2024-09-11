@@ -37,14 +37,31 @@ internal class Graph
     internal void RemoveEdge(Edge edge)
     {
         var oldedge = Edges.FirstOrDefault(k => k.Id == edge.Id);
-        if(oldedge is not null) Edges.Remove(oldedge);
+        if(oldedge is not null) 
+        {
+            switch(this.GraphType)
+            {
+                case GraphType.Directed:
+                oldedge.Vertex1.RemoveAdjacent(oldedge.Vertex2);
+                break;
+                case GraphType.Undirected:
+                oldedge.Vertex1.RemoveAdjacent(oldedge.Vertex2);
+                oldedge.Vertex2.RemoveAdjacent(oldedge.Vertex1);
+                break;
+            }
+            Edges.Remove(oldedge);
+        }
     }
     internal void RemoveVertex(Vertex vertex)
     {
         var oldvertex = Vertices.FirstOrDefault(k => k.Id == vertex.Id);
         if(oldvertex is not null)
         {
-            Edges.RemoveAll(k => k.Vertex1.Id == oldvertex.Id || k.Vertex2.Id == oldvertex.Id);
+            var edges = Edges.Where(k => k.Vertex1.Id == oldvertex.Id || k.Vertex2.Id == oldvertex.Id).ToList();
+            foreach(var edge in edges)
+            {
+                RemoveEdge(edge);
+            }
             Vertices.Remove(oldvertex);
         }
     }
