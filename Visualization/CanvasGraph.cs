@@ -85,12 +85,14 @@ internal class CanvasGraph
             var text = TextElementOfPosition(mouse);
             if(text is null)
             {
-                TextElement textelement = new(){ Id = TextElement.num++, Color = Color.Black, Position = mouse, Text = ""};
+                TextElement textelement = new(){ Id = TextElement.num++, Color = Color.Black, Position = mouse, Text = "Text"};
                 TextElements.Add(textelement);
                 ActiveTextElement = textelement;
             }
             else ActiveTextElement = text;
         }
+        if(ActiveVertex is not null) ActiveVertex = null;
+        if(ActiveEdge is not null) ActiveEdge = null;
     }
     internal Command HandleLeftClick(Position mouse)
     {
@@ -408,7 +410,7 @@ internal class CanvasGraph
     private bool IsPointInCircleOfVertex(Position pos, Vertex vertex)
     {
         var lhs = Math.Pow(vertex.Position.X - pos.X, 2) + Math.Pow(vertex.Position.Y - pos.Y, 2);
-        var rhs = Math.Pow(VisualizationSettings.VertexRadius/2, 2);
+        var rhs = Math.Pow(VisualizationSettings.VertexRadius, 2);
         return lhs <= rhs;
     }
     private bool IsPointInRectangleOfEdge(Position pos, Edge edge)

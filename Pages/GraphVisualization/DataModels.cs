@@ -8,10 +8,12 @@ public class GraphModel
 {
     public required string X { get; set; }
     public required string Y { get; set; }
+    public required string Command { get; set; }
     internal Canvas? Canvas { get; set; }
 }
 public class SolutionModel
 {
+    internal string? Command { get; set; }
     internal List<string>? Lines { get; set; }
 }
 public class EdgeModel

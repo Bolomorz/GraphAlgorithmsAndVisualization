@@ -21,14 +21,14 @@ body {
   margin-bottom: 60px;
 }
 
-table {
+.canvas table {
   margin: 2%;
   border: solid black 2px;
   width: 96%;
   height: 96%;
   background-color: black;
 }
-td {
+.canvas td {
   margin: 2%;
   width: 96%;
   height: 96%;
@@ -41,4 +41,44 @@ td {
   width: 98%;
   height: 98%;
   border: solid black 2px;
+}
+
+.solution {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  overflow: auto;
+  height: 700px;
+}
+.solution table {
+  border-collapse: collapse;
+  width: 100%;
+  color: #ffffff;
+  border: 1px solid #04083b;
+}
+.solution thead th {
+  background-color: #04083b;
+  text-align: left;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.solution th, .solution td {
+  padding: 12px 15px;
+}
+.solution tbody td {
+  text-align: left;
+}
+.solution tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+.solution tbody tr:nth-of-type(even) {
+  background-color: #6970c7;
+}
+
+.solution tbody tr:nth-of-type(odd) {
+  background-color: #1421d1;
+}
+
+.solution tbody tr:last-of-type {
+  border-bottom: 2px solid rgb(13, 211, 211);
 }

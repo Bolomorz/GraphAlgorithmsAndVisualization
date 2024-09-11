@@ -2,22 +2,26 @@
 @using GraphAlgorithmsAndVisualization.Visualization
 @using System.Drawing
 @model GraphModel
-<table>
+<table class="canvas">
     <tr>
-        <td colspan="5">
-
-        </td>
-        <td colspan="5">
-
-        </td>
+        <form method="post">
+            <td colspan="1">
+                <input type="text" placeholder="enter help for help" asp-for="@Model.Command"/>
+            </td>
+            <td colspan="1">
+                <input type="submit" asp-page-handler="IssueCommand" value="Issue Command"/>
+            </td>
+        </form>
     </tr>
     <tr>
-        <td colspan="10">
+        <td colspan="2">
             <form method="post">
                 <canvas id="graphcanvas" tabindex="1"/>
                 <input id="graphcanvasx" type="text" hidden value="" asp-for="@Model.X"/>
                 <input id="graphcanvasy" type="text" hidden value="" asp-for="@Model.Y"/>
-                <input id="graphcanvasbtn" asp-page-handler="GraphCanvasClick" hidden type="submit" value="submit"/>
+                <input id="graphcanvasbtnleft" asp-page-handler="GraphCanvasClickLeft" hidden type="submit" value="submit"/>
+                <input id="graphcanvasbtnright" asp-page-handler="GraphCanvasClickRight" hidden type="submit" value="submit"/>
+                <input id="graphcanvasdelete" asp-page-handler="GraphCanvasDelete" hidden type="submit" value="submit"/>
             </form>
         </td>
     </tr>
@@ -25,10 +29,12 @@
 <script type="text/javascript">
 var gc = document.getElementById("graphcanvas");
 var rect = gc.getBoundingClientRect();
-gc.width = rect.width * 4;
-gc.height = rect.height * 4;
+gc.width = rect.width * 2;
+gc.height = rect.height * 2;
 var ctx = gc.getContext("2d");
 gc.addEventListener("mousedown", function(e){GraphCanvasClick(e);});
+gc.addEventListener("keydown", function(e){GraphCanvasKeyDown(e);});
+gc.focus();
 function GraphCanvasClick(e)
 {
     e = e || window.event;
@@ -37,7 +43,14 @@ function GraphCanvasClick(e)
     var y = (e.clientY - rect.top) * gc.height / rect.height;
     document.getElementById("graphcanvasx").value = x.toString();
     document.getElementById("graphcanvasy").value = y.toString();
-    document.getElementById("graphcanvasbtn").click();
+    if(e.which === 3) document.getElementById("graphcanvasbtnright").click();
+    if(e.which === 1) document.getElementById("graphcanvasbtnleft").click();
+}
+function GraphCanvasKeyDown(e)
+{
+    e = e || window.event;
+    var key = e.key;
+    if(key == "Delete") document.getElementById("graphcanvasdelete").click();
 }
 function ClearCanvas()
 {
@@ -61,6 +74,28 @@ function DrawText(color, x, y, text, font)
     ctx.textAlign = "center";
     ctx.fillText(text, x, y);
 }
+function DrawLine(color, x1, y1, x2, y2, thickness)
+{
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    ctx.lineWidth = thickness;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+}
+function DrawArrow(color, x1, y1, x2, y2, x3, y3)
+{
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.lineTo(x3, y3);
+    ctx.lineTo(x1, y1);
+    ctx.stroke();
+    ctx.fill();
+}
 </script>
 
 @if(@Model.Canvas is not null)
@@ -79,6 +114,16 @@ function DrawText(color, x, y, text, font)
         var t = text.Text;
         if(text.Color == Color.Blue){ <script type="text/javascript">DrawText("blue", @x, @y, "@t", @VisualizationSettings.FontSize)</script> }
         else { <script type="text/javascript">DrawText("black", @x, @y, "@t", @VisualizationSettings.FontSize)</script> }
+    }
+    foreach(var line in Model.Canvas.LineElements)
+    {
+        if(line.Color == Color.Blue){ <script type="text/javascript">DrawLine("blue", @line.Start.X, @line.Start.Y, @line.End.X, @line.End.Y, @line.Thickness)</script> }
+        else { <script type="text/javascript">DrawLine("black", @line.Start.X, @line.Start.Y, @line.End.X, @line.End.Y, @line.Thickness)</script> }
+    }
+    foreach(var arrow in Model.Canvas.ArrowElements)
+    {
+        if(arrow.Color == Color.Blue){ <script type="text/javascript">DrawArrow("blue", @arrow.Tip.X, @arrow.Tip.Y, @arrow.Left.X, @arrow.Left.Y, @arrow.Right.X, @arrow.Right.Y)</script> }
+        else { <script type="text/javascript">DrawArrow("black", @arrow.Tip.X, @arrow.Tip.Y, @arrow.Left.X, @arrow.Left.Y, @arrow.Right.X, @arrow.Right.Y)</script> }
     }
 }
 

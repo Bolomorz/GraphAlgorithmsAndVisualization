@@ -55,15 +55,14 @@ internal class Canvas
     }
     internal void DrawArrow(Position start, Position end, Color color)
     {
-        double theta = Math.Atan2(end.Y - start.Y, end.X - start.X) * 180 / Math.PI;
+        double theta = Math.Atan2(end.Y - start.Y, end.X - start.X);
 
-        Position tip = new(){ X = start.X + ((end.X - start.X) / 1.35), Y = start.Y + ((end.Y - start.Y) / 1.35)};
-        Position lpoint = new(){ X = tip.X + 3, Y = tip.Y + 15};
-        Position rpoint = new(){ X = tip.X - 3, Y = tip.Y + 15};
+        Position tip = new(){ X = (start.X + end.X) / 2, Y = (start.Y + end.Y) / 2};
+        Position lpoint = new(){ X = tip.X - 50, Y = tip.Y + 10};
+        Position rpoint = new(){ X = tip.X - 50, Y = tip.Y - 10};
 
-        double angle = theta + 90;
-        var left = Rotate(lpoint, tip, angle);
-        var right = Rotate(rpoint, tip, angle);
+        var left = Rotate(lpoint, tip, theta);
+        var right = Rotate(rpoint, tip, theta);
 
         ArrowElements.Add(new()
         {
@@ -73,12 +72,17 @@ internal class Canvas
             Color = color
         });
     }
-
+    
     private Position Rotate(Position pos, Position center, double angle)
     {
-        double x = Math.Cos(angle) * (pos.X - center.X) - Math.Sin(angle) * (pos.Y - center.Y) + center.X;
-        double y = Math.Sin(angle) * (pos.X - center.X) + Math.Cos(angle) * (pos.Y - center.Y) + center.Y;
-        return new(){ X = x, Y = y };
+        double sin = Math.Sin(angle);
+        double cos = Math.Cos(angle);
+        double px = pos.X - center.X;
+        double py = pos.Y - center.Y;
+        double x = px * cos - py * sin;
+        double y = px * sin + py * cos;
+
+        return new(){ X = x + center.X, Y = y + center.Y };
     }
 }
 

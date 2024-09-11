@@ -44,7 +44,7 @@ internal class Graph
         var oldvertex = Vertices.FirstOrDefault(k => k.Id == vertex.Id);
         if(oldvertex is not null)
         {
-            foreach(var edge in Edges) if(oldvertex.Id == edge.Vertex1.Id || oldvertex.Id == edge.Vertex2.Id) RemoveEdge(edge);
+            Edges.RemoveAll(k => k.Vertex1.Id == oldvertex.Id || k.Vertex2.Id == oldvertex.Id);
             Vertices.Remove(oldvertex);
         }
     }
@@ -63,7 +63,7 @@ internal class Graph
     }
     internal void AddEdge(Edge edge)
     {
-        var oldedge = Edges.First(k => k.Id == edge.Id);
+        var oldedge = Edges.FirstOrDefault(k => k.Id == edge.Id);
         if(oldedge is null && !IsEdgeInGraph(edge))
         {
             switch(this.GraphType)

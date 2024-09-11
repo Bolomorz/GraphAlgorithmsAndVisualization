@@ -1,0 +1,27 @@
+@using GraphAlgorithmsAndVisualization.Models;
+@model SolutionModel;
+<div class="solution">
+<table>
+    <thead>
+    <tr>
+        <th>Solution to Command: @Model.Command</th>
+        <th width="50px">
+            <form method="post">
+                <input type="submit" asp-page-handler="Submit" value="Close"/>
+            </form>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    @if(Model.Lines is not null)
+    {
+        @foreach(var line in Model.Lines)
+        {
+            <tr>
+                <td colspan="2">@line</td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>
+</div>
