@@ -2,19 +2,20 @@
 @using GraphAlgorithmsAndVisualization.Visualization
 @using System.Drawing
 @model GraphModel
+<div class="canvas">
 <table class="canvas">
-    <tr>
+    <tr class="canvas">
         <form method="post">
-            <td colspan="1">
+            <td class="canvas" colspan="1">
                 <input id="commandbox" type="text" placeholder="enter help for help" asp-for="@Model.Command"/>
             </td>
-            <td colspan="1">
+            <td class="canvas" colspan="1">
                 <input id="commandbtn" type="submit" asp-page-handler="IssueCommand" value="Issue Command"/>
             </td>
         </form>
     </tr>
-    <tr>
-        <td colspan="2">
+    <tr class="canvas">
+        <td class="canvas" colspan="2">
             <form method="post">
                 <canvas id="graphcanvas" tabindex="1"/>
                 <input id="graphcanvasx" type="text" hidden value="" asp-for="@Model.X"/>
@@ -26,11 +27,12 @@
         </td>
     </tr>
 </table>
+</div>
 <script type="text/javascript">
 var gc = document.getElementById("graphcanvas");
 var rect = gc.getBoundingClientRect();
-gc.width = rect.width * 2;
-gc.height = rect.height * 2;
+gc.width = rect.width * 3;
+gc.height = rect.height * 3;
 var ctx = gc.getContext("2d");
 gc.addEventListener("mousedown", function(e){GraphCanvasClick(e);});
 gc.addEventListener("keydown", function(e){GraphCanvasKeyDown(e);});
@@ -102,10 +104,9 @@ function DrawArrow(color, x1, y1, x2, y2, x3, y3)
     ctx.fill();
 }
 </script>
-
+<script type="text/javascript">ClearCanvas()</script>
 @if(@Model.Canvas is not null)
 {
-    <script type="text/javascript">ClearCanvas()</script>
     foreach(var circle in Model.Canvas.CircleElements)
     {
         if(circle.Color == Color.Blue){ <script type="text/javascript">DrawCircle("blue", @circle.Center.X, @circle.Center.Y, @circle.Radius)</script> }

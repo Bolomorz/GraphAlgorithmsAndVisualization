@@ -19,27 +19,46 @@ html {
 
 body {
   margin-bottom: 60px;
+  background: linear-gradient(35deg, rgb(142, 142, 240), rgb(170, 235, 235));
 }
 
+
+.canvas div {
+  width: 98%;
+  height: 70%;
+  margin: auto; 
+}
 .canvas table {
-  margin: 2%;
   border: solid black 2px;
   width: 96%;
   height: 96%;
+  margin: auto; 
   background-color: black;
 }
+.canvas tr {
+  width: 98%;
+  height: 98%;
+  margin: auto; 
+}
 .canvas td {
-  margin: 2%;
-  width: 96%;
-  height: 96%;
+  width: 48%;
+  height: 48%;
+  margin: auto; 
   border: solid black 2px;
-  background-color: #CCCCCC;
+  background-color: #04083b;
+}
+.canvas input {
+  min-width: 60%;
 }
 #graphcanvas {
   position: relative;
-  margin: 1%;
+  margin: auto; 
+  min-height: 98%;
   width: 98%;
+  max-width: 98%;
+  min-width: 98%;
   height: 98%;
+  max-height: 98%;
   border: solid black 2px;
 }
 
