@@ -9,7 +9,7 @@ internal class Dijkstra : IGraphAlgorithm
 
     internal Dijkstra(Graph graph, Vertex startvertex)
     {
-        if(graph.GraphType != GraphType.Directed) throw new Exception("Can only use Dijkstra on Directed Graph");
+        if(graph.GraphType != GraphType.Directed || graph.GraphWeighting != GraphWeighting.Weighted) throw new Exception("Can only use Dijkstra on Weighted Directed Graph");
         Graph = graph;
         Q = new();
         Elements = new();

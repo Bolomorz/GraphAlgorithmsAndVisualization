@@ -6,7 +6,7 @@ namespace GraphAlgorithmsAndVisualization.Visualization;
 
 internal class CanvasGraph
 {
-    private AbstractGraphElement? ActiveGraphElement { get; set; }
+    private AGraphElement? ActiveGraphElement { get; set; }
     private Graph Graph { get; set; }
     private Canvas Canvas { get; set; }
     private List<Text> Texts { get; set; }
@@ -436,5 +436,5 @@ internal enum Command { None, GraphElement}
 internal class CommandTarget
 {
     internal required Command Command { get; set; }
-    internal AbstractGraphElement? Target { get; set; }
+    internal AGraphElement? Target { get; set; }
 }

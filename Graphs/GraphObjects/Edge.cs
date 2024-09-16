@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 namespace GraphAlgorithmsAndVisualization.Graphs;
 
 [DataContract(Name = "Edge", IsReference = true)]
-internal class Edge : AbstractGraphElement
+internal class Edge : AGraphElement
 {
     [DataMember]
     internal override int Id { get; set; }
@@ -41,7 +41,7 @@ internal class Edge : AbstractGraphElement
         Weight = weight;
     }
 
-    internal override bool Equals(AbstractGraphElement? other)
+    internal override bool Equals(AGraphElement? other)
     {
         if(other is null) return false;
         if(typeof(Edge) != other.GetType()) return false;

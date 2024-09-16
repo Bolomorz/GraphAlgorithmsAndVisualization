@@ -86,7 +86,7 @@ public class IndexModel : PageModel
         return Page();
     }
 
-    private void DisplayConfig(AbstractGraphElement element)
+    private void DisplayConfig(AGraphElement element)
     {
         ElementModel.GraphElement = element;
         VisualizationGlobal.CurrentPartial = Models.Partial.GraphElement;

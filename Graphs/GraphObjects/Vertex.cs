@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 namespace GraphAlgorithmsAndVisualization.Graphs;
 
 [DataContract(Name = "Vertex", IsReference = true)]
-internal class Vertex : AbstractGraphElement
+internal class Vertex : AGraphElement
 {
     [DataMember]
     internal override int Id { get; set; }
@@ -43,7 +43,7 @@ internal class Vertex : AbstractGraphElement
         Adjacents.Remove(adj);
     }
 
-    internal override bool Equals(AbstractGraphElement? other)
+    internal override bool Equals(AGraphElement? other)
     {
         if(other is null) return false;
         if(typeof(Vertex) != other.GetType()) return false;

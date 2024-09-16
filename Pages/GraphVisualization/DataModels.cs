@@ -20,6 +20,6 @@ public class GraphElementModel
 {
     public required string Content { get; set; }
     public required string? Weight { get; set; }
-    internal AbstractGraphElement? GraphElement { get; set; }
+    internal AGraphElement? GraphElement { get; set; }
 }
 
