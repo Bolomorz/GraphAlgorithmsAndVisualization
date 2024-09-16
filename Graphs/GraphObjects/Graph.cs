@@ -15,6 +15,8 @@ internal class Graph
     [DataMember]
     internal List<Edge> Edges { get; set; } 
     [DataMember]
+    internal List<Text> Texts { get; set; }
+    [DataMember]
     internal GraphType GraphType { get; set;}
     [DataMember]
     internal GraphWeighting GraphWeighting { get; set; }
@@ -26,6 +28,7 @@ internal class Graph
         Id = num++;
         Vertices = new();
         Edges = new();
+        Texts = new();
         GraphType = type;
         GraphWeighting = weighting;
     }

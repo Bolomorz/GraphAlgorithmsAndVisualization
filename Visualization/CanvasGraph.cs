@@ -9,13 +9,11 @@ internal class CanvasGraph
     private AGraphElement? ActiveGraphElement { get; set; }
     private Graph Graph { get; set; }
     private Canvas Canvas { get; set; }
-    private List<Text> Texts { get; set; }
 
     internal CanvasGraph(GraphType type, GraphWeighting weighting)
     {
         Graph = new(type, weighting);
         Canvas = new();
-        Texts = new();
         ActiveGraphElement = null;
     }
 
@@ -41,7 +39,7 @@ internal class CanvasGraph
             }
             Canvas.DrawText(edge.Position, edge.Content + ": " + edge.Weight, color);
         }
-        foreach(var text in Texts)
+        foreach(var text in Graph.Texts)
         {
             Color color = ActiveGraphElement is not null && ActiveGraphElement.Equals(text) ? Color.Blue : Color.Black;
             Canvas.DrawText(text.Position, text.Content, color);
@@ -69,7 +67,7 @@ internal class CanvasGraph
         }
         else if(ActiveGraphElement is not null && ActiveGraphElement.GetType() == typeof(Text))
         {
-            Texts.Remove((Text)ActiveGraphElement);
+            Graph.Texts.Remove((Text)ActiveGraphElement);
             ActiveGraphElement = null;
         }
     }
@@ -82,7 +80,7 @@ internal class CanvasGraph
             if(text is null)
             {
                 Text textelement = new(mouse, "Text");
-                Texts.Add(textelement);
+                Graph.Texts.Add(textelement);
                 ActiveGraphElement = textelement;
             }
             else ActiveGraphElement = text;
@@ -426,7 +424,7 @@ internal class CanvasGraph
     }
     private Text? TextElementOfPosition(Position pos)
     {
-        foreach(var text in Texts) if(IsPointInRectangleOfTextElement(pos, text)) return text;
+        foreach(var text in Graph.Texts) if(IsPointInRectangleOfTextElement(pos, text)) return text;
         return null;
     }
     #endregion

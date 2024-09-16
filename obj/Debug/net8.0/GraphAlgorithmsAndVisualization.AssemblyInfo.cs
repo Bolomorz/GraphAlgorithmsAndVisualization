@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GraphAlgorithmsAndVisualization")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a56d30a62428d0fd2027cbd54d68a8c88ab9a63f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+27b328eca6bf97dca05236569b4bf9f94d4cf89f")]
 [assembly: System.Reflection.AssemblyProductAttribute("GraphAlgorithmsAndVisualization")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GraphAlgorithmsAndVisualization")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
