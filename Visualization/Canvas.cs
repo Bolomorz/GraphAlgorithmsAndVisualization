@@ -77,12 +77,12 @@ internal class Canvas
     {
         double sin = Math.Sin(angle);
         double cos = Math.Cos(angle);
-        double px = pos.X - center.X;
-        double py = pos.Y - center.Y;
-        double x = px * cos - py * sin;
-        double y = px * sin + py * cos;
 
-        return new(){ X = x + center.X, Y = y + center.Y };
+        return new()
+        { 
+            X = (pos.X - center.X) * cos - (pos.Y - center.Y) * sin + center.X, 
+            Y = (pos.X - center.X) * sin + (pos.Y - center.Y) * cos + center.Y 
+        };
     }
 }
 
