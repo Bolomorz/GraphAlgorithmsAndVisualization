@@ -25,7 +25,6 @@ body {
 
 .canvas div {
   width: 98%;
-  height: 70%;
   margin: auto; 
 }
 .canvas table {
@@ -63,8 +62,8 @@ body {
 }
 
 .solution {
-  margin-top: 5px;
-  margin-bottom: 5px;
+  width: 95%;
+  margin: auto;
   overflow: auto;
   height: 700px;
 }

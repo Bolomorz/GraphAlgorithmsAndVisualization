@@ -6,21 +6,17 @@ namespace GraphAlgorithmsAndVisualization.Visualization;
 
 internal class CanvasGraph
 {
-    private TextElement? ActiveTextElement { get; set; }
-    private Vertex? ActiveVertex { get; set; }
-    private Edge? ActiveEdge { get; set; }
+    private AbstractGraphElement? ActiveGraphElement { get; set; }
     private Graph Graph { get; set; }
     private Canvas Canvas { get; set; }
-    private List<TextElement> TextElements { get; set; }
+    private List<Text> Texts { get; set; }
 
     internal CanvasGraph(GraphType type, GraphWeighting weighting)
     {
         Graph = new(type, weighting);
         Canvas = new();
-        TextElements = new();
-        ActiveTextElement = null;
-        ActiveVertex = null;
-        ActiveEdge = null;
+        Texts = new();
+        ActiveGraphElement = null;
     }
 
     #region Drawing
@@ -29,13 +25,13 @@ internal class CanvasGraph
         Canvas.Clear();
         foreach(var vertex in Graph.Vertices)
         {
-            Color color = ActiveVertex is not null && ActiveVertex.Id == vertex.Id ? Color.Blue : Color.Black;
+            Color color = ActiveGraphElement is not null && ActiveGraphElement.Equals(vertex) ? Color.Blue : Color.Black;
             Canvas.DrawCircle(vertex.Position, VisualizationSettings.VertexRadius, color);
-            Canvas.DrawText(vertex.Position, vertex.Name, color);
+            Canvas.DrawText(vertex.Position, vertex.Content, color);
         }
         foreach(var edge in Graph.Edges)
         {
-            Color color = ActiveEdge is not null && ActiveEdge.Id == edge.Id ? Color.Blue : Color.Black;
+            Color color = ActiveGraphElement is not null && ActiveGraphElement.Equals(edge) ? Color.Blue : Color.Black;
             Canvas.DrawLine(edge.Vertex1.Position, edge.Position, color);
             Canvas.DrawLine(edge.Position, edge.Vertex2.Position, color);
             if(Graph.GraphType == GraphType.Directed)
@@ -43,12 +39,12 @@ internal class CanvasGraph
                 Canvas.DrawArrow(edge.Vertex1.Position, edge.Position, color);
                 Canvas.DrawArrow(edge.Position, edge.Vertex2.Position, color);
             }
-            Canvas.DrawText(edge.Position, edge.Name + ": " + edge.Weight, color);
+            Canvas.DrawText(edge.Position, edge.Content + ": " + edge.Weight, color);
         }
-        foreach(var text in TextElements)
+        foreach(var text in Texts)
         {
-            Color color = ActiveTextElement is not null && ActiveTextElement.Id == text.Id ? Color.Blue : Color.Black;
-            Canvas.DrawText(text.Position, text.Text, color);
+            Color color = ActiveGraphElement is not null && ActiveGraphElement.Equals(text) ? Color.Blue : Color.Black;
+            Canvas.DrawText(text.Position, text.Content, color);
         }
     }
     internal Canvas DrawCanvas()
@@ -61,75 +57,73 @@ internal class CanvasGraph
     #region HandleInput
     internal void HandleDelete()
     {
-        if(ActiveVertex is not null)
+        if(ActiveGraphElement is not null && ActiveGraphElement.GetType() == typeof(Vertex))
         {
-            Graph.RemoveVertex(ActiveVertex);
-            ActiveVertex = null;
+            Graph.RemoveVertex((Vertex)ActiveGraphElement);
+            ActiveGraphElement = null;
         }
-        else if(ActiveEdge is not null)
+        else if(ActiveGraphElement is not null && ActiveGraphElement.GetType() == typeof(Edge))
         {
-            Graph.RemoveEdge(ActiveEdge);
-            ActiveEdge = null;
+            Graph.RemoveEdge((Edge)ActiveGraphElement);
+            ActiveGraphElement = null;
         }
-        else if(ActiveTextElement is not null)
+        else if(ActiveGraphElement is not null && ActiveGraphElement.GetType() == typeof(Text))
         {
-            TextElements.Remove(ActiveTextElement);
-            ActiveTextElement = null;
+            Texts.Remove((Text)ActiveGraphElement);
+            ActiveGraphElement = null;
         }
     }
     internal void HandleRightClick(Position mouse)
     {
-        if(ActiveTextElement is not null) ActiveTextElement.Position = mouse;
+        if(ActiveGraphElement is not null) ActiveGraphElement.Position = mouse;
         else
         {
             var text = TextElementOfPosition(mouse);
             if(text is null)
             {
-                TextElement textelement = new(){ Id = TextElement.num++, Color = Color.Black, Position = mouse, Text = "Text"};
-                TextElements.Add(textelement);
-                ActiveTextElement = textelement;
+                Text textelement = new(mouse, "Text");
+                Texts.Add(textelement);
+                ActiveGraphElement = textelement;
             }
-            else ActiveTextElement = text;
+            else ActiveGraphElement = text;
         }
-        if(ActiveVertex is not null) ActiveVertex = null;
-        if(ActiveEdge is not null) ActiveEdge = null;
     }
     internal Command HandleLeftClick(Position mouse)
     {
-        if(ActiveTextElement is not null)
+        if(ActiveGraphElement is not null && ActiveGraphElement.GetType() == typeof(Text))
         {
             var text = TextElementOfPosition(mouse);
-            if(text is not null && ActiveTextElement.Id == text.Id) return new(){ Target = CommandTarget.TextElement, TextElement = text};
-            else { ActiveTextElement.Position = mouse; ActiveTextElement = null; }
+            if(ActiveGraphElement.Equals(text)) return new(){ Target = CommandTarget.GraphElement, GraphElement = text};
+            else { ActiveGraphElement.Position = mouse; ActiveGraphElement = null; }
         }
-        else if(ActiveVertex is not null)
+        else if(ActiveGraphElement is not null && ActiveGraphElement.GetType() == typeof(Vertex))
         {
             var vertex = VertexOfPosition(mouse);
-            if(vertex is not null && ActiveVertex.Id != vertex.Id)
+            if(vertex is not null && !ActiveGraphElement.Equals(vertex))
             {
-                Position pos = new(){ X = (vertex.Position.X + ActiveVertex.Position.X)/2, Y = (vertex.Position.Y + ActiveVertex.Position.Y)/2};
-                string name = ActiveVertex.Name + " " + vertex.Name;
-                if(Graph.GraphWeighting == GraphWeighting.Weighted) Graph.AddEdge(new Edge(name, ActiveVertex, vertex, pos, 1));
-                else Graph.AddEdge(new Edge(name, ActiveVertex, vertex, pos));
-                ActiveVertex = null;
+                Position pos = new(){ X = (vertex.Position.X + ActiveGraphElement.Position.X)/2, Y = (vertex.Position.Y + ActiveGraphElement.Position.Y)/2};
+                string name = ActiveGraphElement.Content + " " + vertex.Content;
+                if(Graph.GraphWeighting == GraphWeighting.Weighted) Graph.AddEdge(new Edge(name, (Vertex)ActiveGraphElement, vertex, pos, 1));
+                else Graph.AddEdge(new Edge(name, (Vertex)ActiveGraphElement, vertex, pos));
+                ActiveGraphElement = null;
             }
-            else if(vertex is not null && ActiveVertex.Id == vertex.Id) return new(){ Target = CommandTarget.Vertex, Vertex = vertex};
-            else { ActiveVertex.Position = mouse; ActiveVertex = null; }
+            else if(vertex is not null && ActiveGraphElement.Equals(vertex)) return new(){ Target = CommandTarget.GraphElement, GraphElement = vertex};
+            else { ActiveGraphElement.Position = mouse; ActiveGraphElement = null; }
         }
-        else if(ActiveEdge is not null)
+        else if(ActiveGraphElement is not null && ActiveGraphElement.GetType() == typeof(Edge))
         {
             var edge = EdgeOfPosition(mouse);
-            if(edge is not null && ActiveEdge.Id == edge.Id) return new(){ Target = CommandTarget.Edge, Edge = edge};
-            else { ActiveEdge.Position = mouse; ActiveEdge = null; }
+            if(edge is not null && ActiveGraphElement.Equals(edge)) return new(){ Target = CommandTarget.GraphElement, GraphElement = edge};
+            else { ActiveGraphElement.Position = mouse; ActiveGraphElement = null; }
         }
         else
         {
             var vertex = VertexOfPosition(mouse);
             var edge = EdgeOfPosition(mouse);
             var text = TextElementOfPosition(mouse);
-            if(vertex is not null) ActiveVertex = vertex;
-            else if(edge is not null) ActiveEdge = edge;
-            else if(text is not null) ActiveTextElement = text;
+            if(vertex is not null) ActiveGraphElement = vertex;
+            else if(edge is not null) ActiveGraphElement = edge;
+            else if(text is not null) ActiveGraphElement = text;
             else
             {
                 Vertex vnew = new(mouse);
@@ -371,37 +365,21 @@ internal class CanvasGraph
         }
         return lines;
     }
-    internal void HandleInput(VertexModel vm)
+    internal void HandleInput(GraphElementModel gem)
     {
-        if(ActiveVertex is not null)
+        if(ActiveGraphElement is not null)
         {
-            ActiveVertex.Name = vm.Name;
-            ActiveVertex = null;
-        }
-    }
-    internal void HandleInput(EdgeModel em)
-    {
-        if(ActiveEdge is not null)
-        {
-            ActiveEdge.Name = em.Name;
-            ActiveEdge.Weight = Convert.ToDouble(em.Weight);
-            ActiveEdge = null;
-        }
-    }
-    internal void HandleInput(TextElementModel tem)
-    {
-        if(ActiveTextElement is not null)
-        {
-            ActiveTextElement.Text = tem.Content;
-            ActiveTextElement = null;
+            ActiveGraphElement.Content = gem.Content;
+            ActiveGraphElement.Weight = gem.Weight is null ? null : double.Parse(gem.Weight);
+            ActiveGraphElement = null;
         }
     }
     #endregion
 
     #region QueryByName
-    private Vertex? QueryVerticesByName(string name)
+    private Vertex? QueryVerticesByName(string content)
     {
-        foreach(var vertex in Graph.Vertices) if(vertex.Name == name) return vertex;
+        foreach(var vertex in Graph.Vertices) if(vertex.Content == content) return vertex;
         return null;
     }
     #endregion
@@ -415,22 +393,22 @@ internal class CanvasGraph
     }
     private bool IsPointInRectangleOfEdge(Position pos, Edge edge)
     {
-        string line = edge.Name + ": " + edge.Weight;
+        string line = edge.Content + ": " + edge.Weight;
         var size = VisualizationSettings.GetTextSize(line);
         var left = edge.Position.X - size.width / 2;
         var right = edge.Position.X + size.width / 2;
-        var top = edge.Position.Y - size.height / 2;
-        var bottom = edge.Position.Y + size.height / 2;
+        var top = edge.Position.Y - size.height / 2 - 10;
+        var bottom = edge.Position.Y + size.height / 2 + 10;
         return pos.X >= left && pos.X <= right && pos.Y >= top && pos.Y <= bottom;
     }
-    private bool IsPointInRectangleOfTextElement(Position pos, TextElement text)
+    private bool IsPointInRectangleOfTextElement(Position pos, Text text)
     {
-        string line = text.Text;
+        string line = text.Content;
         var size = VisualizationSettings.GetTextSize(line);
         var left = text.Position.X - size.width / 2;
         var right = text.Position.X + size.width / 2;
-        var top = text.Position.Y - size.height / 2;
-        var bottom = text.Position.Y + size.height / 2;
+        var top = text.Position.Y - size.height / 2 - 10;
+        var bottom = text.Position.Y + size.height / 2 + 10;
         return pos.X >= left && pos.X <= right && pos.Y >= top && pos.Y <= bottom;
     }
     #endregion
@@ -446,19 +424,17 @@ internal class CanvasGraph
         foreach(var edge in Graph.Edges) if(IsPointInRectangleOfEdge(pos, edge)) return edge;
         return null;
     }
-    private TextElement? TextElementOfPosition(Position pos)
+    private Text? TextElementOfPosition(Position pos)
     {
-        foreach(var text in TextElements) if(IsPointInRectangleOfTextElement(pos, text)) return text;
+        foreach(var text in Texts) if(IsPointInRectangleOfTextElement(pos, text)) return text;
         return null;
     }
     #endregion
 }
 
-internal enum CommandTarget { None, Vertex, Edge, TextElement}
+internal enum CommandTarget { None, GraphElement}
 internal class Command
 {
     internal required CommandTarget Target { get; set; }
-    internal Vertex? Vertex { get; set; }
-    internal Edge? Edge { get; set; }
-    internal TextElement? TextElement { get; set; }
+    internal AbstractGraphElement? GraphElement { get; set; }
 }

@@ -88,11 +88,9 @@ internal class Canvas
 
 internal class TextElement
 {
-    internal int Id { get; set; }
     internal required Position Position { get; set; }
     internal required string Text { get; set; }
     internal required Color Color { get; set; }
-    internal static int num = 0;
 }
 
 internal class LineElement

@@ -16,20 +16,10 @@ public class SolutionModel
     internal string? Command { get; set; }
     internal List<string>? Lines { get; set; }
 }
-public class EdgeModel
-{
-    public required string Name { get; set; }
-    public required string Weight { get; set; }
-    internal Edge? Edge { get; set; }
-}
-public class VertexModel
-{
-    public required string Name { get; set; }
-    internal Vertex? Vertex { get; set; }
-}
-public class TextElementModel
+public class GraphElementModel
 {
     public required string Content { get; set; }
-    internal TextElement? TextElement { get; set; }
+    public required string? Weight { get; set; }
+    internal AbstractGraphElement? Edge { get; set; }
 }
 

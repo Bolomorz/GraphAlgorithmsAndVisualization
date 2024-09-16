@@ -3,14 +3,16 @@ using System.Runtime.Serialization;
 namespace GraphAlgorithmsAndVisualization.Graphs;
 
 [DataContract(Name = "Vertex", IsReference = true)]
-internal class Vertex
+internal class Vertex : AbstractGraphElement
 {
     [DataMember]
-    internal int Id { get; set; }
+    internal override int Id { get; set; }
     [DataMember]
-    internal string Name { get; set; }
+    internal override string Content { get; set; }
     [DataMember]
-    internal Position Position { get; set; }
+    internal override Position Position { get; set; }
+    internal override double? Weight { get; set; }
+
     [DataMember]
     internal List<Vertex> Adjacents { get; set; }
 
@@ -19,9 +21,10 @@ internal class Vertex
     internal Vertex(Position position)
     {
         Id = num++;
-        Name = "vertex" + Id;
+        Content = "vertex" + Id;
         Position = position;
         Adjacents = new();
+        Weight = null;
     }
 
     internal int? GetAdjacentIndex(Vertex adj)
@@ -40,5 +43,12 @@ internal class Vertex
         Adjacents.Remove(adj);
     }
 
-    public override string ToString() => string.Format("Vertex {0}: {1} {2}", Id, Name, Position);
+    internal override bool Equals(AbstractGraphElement? other)
+    {
+        if(other is null) return false;
+        if(typeof(Vertex) != other.GetType()) return false;
+        return this.Id == other.Id;
+    }
+
+    public override string ToString() => string.Format("Vertex {0}: {1} {2}", Id, Content, Position);
 }
