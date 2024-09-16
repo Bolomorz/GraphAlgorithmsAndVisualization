@@ -10,5 +10,5 @@ internal class Position
     [DataMember]
     internal required double Y { get; set; } = 0;
 
-    public override string ToString() => string.Format("[{0}|{1}]", X, Y);
+    public override string ToString() => string.Format("[{0}|{1}]", Math.Round(X, 0).ToString("0.#"), Math.Round(Y, 0).ToString("0.#"));
 }

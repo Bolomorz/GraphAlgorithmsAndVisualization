@@ -3,7 +3,7 @@ using GraphAlgorithmsAndVisualization.Visualization;
 
 namespace GraphAlgorithmsAndVisualization.Models;
 
-public enum Partial { Graph, Solution, Edge, Vertex, TextElement}
+public enum Partial { Graph, Solution, GraphElement }
 public class GraphModel
 {
     public required string X { get; set; }
@@ -20,6 +20,6 @@ public class GraphElementModel
 {
     public required string Content { get; set; }
     public required string? Weight { get; set; }
-    internal AbstractGraphElement? Edge { get; set; }
+    internal AbstractGraphElement? GraphElement { get; set; }
 }
 

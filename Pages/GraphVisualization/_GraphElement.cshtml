@@ -1,0 +1,42 @@
+@using GraphAlgorithmsAndVisualization.Models
+@model GraphElementModel
+
+<div class="config">
+    @if(Model.GraphElement is not null)
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th width="200px">Config for Element:</th>
+                    <th>@Model.GraphElement.ToString()</th>
+                    <th width="50px">
+                        <form method="post">
+                            <input type="submit" asp-page-handler="Close" value="Close"/>
+                        </form>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <form method="post">
+                    <tr>
+                        <td>Content:</td>
+                        <td colspan="2"><input type="text" value="@Model.GraphElement.Content" asp-for="@Model.Content"/></td>
+                    </tr>
+                    @if(Model.GraphElement.Weight is not null)
+                    {
+                    <tr>
+                        <td>Weight:</td>
+                        <td colspan="2"><input type="text" value="@Model.GraphElement.Weight" asp-for="@Model.Weight"/></td>
+                    </tr>
+                    }
+                    <tr>
+                        <td colspan="1">
+                            <input type="submit" asp-page-handler="Submit" value="Submit"/>
+                        </td>
+                        <td colspan="2"/>
+                    </tr>
+                </form>
+            </tbody>
+        </table>
+    }
+</div>

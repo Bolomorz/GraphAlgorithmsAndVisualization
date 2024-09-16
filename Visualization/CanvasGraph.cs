@@ -88,12 +88,12 @@ internal class CanvasGraph
             else ActiveGraphElement = text;
         }
     }
-    internal Command HandleLeftClick(Position mouse)
+    internal CommandTarget HandleLeftClick(Position mouse)
     {
         if(ActiveGraphElement is not null && ActiveGraphElement.GetType() == typeof(Text))
         {
             var text = TextElementOfPosition(mouse);
-            if(ActiveGraphElement.Equals(text)) return new(){ Target = CommandTarget.GraphElement, GraphElement = text};
+            if(ActiveGraphElement.Equals(text)) return new(){ Command = Command.GraphElement, Target = text};
             else { ActiveGraphElement.Position = mouse; ActiveGraphElement = null; }
         }
         else if(ActiveGraphElement is not null && ActiveGraphElement.GetType() == typeof(Vertex))
@@ -107,13 +107,13 @@ internal class CanvasGraph
                 else Graph.AddEdge(new Edge(name, (Vertex)ActiveGraphElement, vertex, pos));
                 ActiveGraphElement = null;
             }
-            else if(vertex is not null && ActiveGraphElement.Equals(vertex)) return new(){ Target = CommandTarget.GraphElement, GraphElement = vertex};
+            else if(vertex is not null && ActiveGraphElement.Equals(vertex)) return new(){ Command = Command.GraphElement, Target = vertex};
             else { ActiveGraphElement.Position = mouse; ActiveGraphElement = null; }
         }
         else if(ActiveGraphElement is not null && ActiveGraphElement.GetType() == typeof(Edge))
         {
             var edge = EdgeOfPosition(mouse);
-            if(edge is not null && ActiveGraphElement.Equals(edge)) return new(){ Target = CommandTarget.GraphElement, GraphElement = edge};
+            if(edge is not null && ActiveGraphElement.Equals(edge)) return new(){ Command = Command.GraphElement, Target = edge};
             else { ActiveGraphElement.Position = mouse; ActiveGraphElement = null; }
         }
         else
@@ -130,7 +130,7 @@ internal class CanvasGraph
                 Graph.AddVertex(vnew);
             }
         }
-        return new(){Target = CommandTarget.None};
+        return new(){Command = Command.None};
     }
     internal List<string> HandleCommand(string command)
     {
@@ -432,9 +432,9 @@ internal class CanvasGraph
     #endregion
 }
 
-internal enum CommandTarget { None, GraphElement}
-internal class Command
+internal enum Command { None, GraphElement}
+internal class CommandTarget
 {
-    internal required CommandTarget Target { get; set; }
-    internal AbstractGraphElement? GraphElement { get; set; }
+    internal required Command Command { get; set; }
+    internal AbstractGraphElement? Target { get; set; }
 }

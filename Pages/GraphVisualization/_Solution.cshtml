@@ -4,10 +4,10 @@
 <table>
     <thead>
     <tr>
-        <th>Solution to Command: @Model.Command</th>
+        <th>Solution to Command: </br><<< @Model.Command</th>
         <th width="50px">
             <form method="post">
-                <input type="submit" asp-page-handler="Submit" value="Close"/>
+                <input type="submit" asp-page-handler="Close" value="Close"/>
             </form>
         </th>
     </tr>
@@ -18,7 +18,7 @@
         @foreach(var line in Model.Lines)
         {
             <tr>
-                <td colspan="2">@line</td>
+                <td colspan="2">>>> @line</td>
             </tr>
         }
     }

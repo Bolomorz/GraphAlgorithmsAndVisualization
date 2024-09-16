@@ -5,6 +5,7 @@ using GraphAlgorithmsAndVisualization.Visualization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.VisualBasic;
 
 namespace GraphAlgorithmsAndVisualization.Pages.GraphVisualization;
 
@@ -15,29 +16,35 @@ public class IndexModel : PageModel
     public GraphModel GraphModel { get; set; }
     [BindProperty]
     public SolutionModel SolutionModel { get; set; }
+    [BindProperty]
+    public GraphElementModel ElementModel { get; set; }
     #endregion
     public IndexModel()
     {
         GraphModel = new(){ X = "", Y = "", Command = ""};
         SolutionModel = new();
+        ElementModel = new(){ Content = "", Weight = null};
     }
 
     public void OnGet()
     {
         VisualizationGlobal.CurrentCanvasGraph = new(Graphs.GraphType.Directed, Graphs.GraphWeighting.Weighted);
     }
-    
+
     public IActionResult OnPostSubmit()
     {
-        switch(VisualizationGlobal.CurrentPartial)
+        if(VisualizationGlobal.CurrentCanvasGraph is not null)
         {
-            case Models.Partial.Solution:
+            VisualizationGlobal.CurrentCanvasGraph.HandleInput(ElementModel);
             DisplayGraph();
-            return Page();
-            default:
-            VisualizationGlobal.CurrentPartial = Models.Partial.Graph;
-            return Page();
         }
+        return Page();
+    }
+    
+    public IActionResult OnPostClose()
+    {
+        DisplayGraph();
+        return Page();
     }
 
     public IActionResult OnPostGraphCanvasClickLeft()
@@ -45,8 +52,9 @@ public class IndexModel : PageModel
         if(VisualizationGlobal.CurrentCanvasGraph is not null && GraphModel.X != "" && GraphModel.Y != "")
         {
             Position pos = new(){ X = Convert.ToDouble(GraphModel.X), Y = Convert.ToDouble(GraphModel.Y)};
-            var cmd = VisualizationGlobal.CurrentCanvasGraph.HandleLeftClick(pos);
-            DisplayGraph();
+            var cmdtarget = VisualizationGlobal.CurrentCanvasGraph.HandleLeftClick(pos);
+            if(cmdtarget.Command == Command.None) DisplayGraph();
+            else if(cmdtarget.Command == Command.GraphElement && cmdtarget.Target is not null) DisplayConfig(cmdtarget.Target);
         }
         return Page();
     }
@@ -74,6 +82,17 @@ public class IndexModel : PageModel
 
     public IActionResult OnPostIssueCommand()
     {
+        DisplaySolution();
+        return Page();
+    }
+
+    private void DisplayConfig(AbstractGraphElement element)
+    {
+        ElementModel.GraphElement = element;
+        VisualizationGlobal.CurrentPartial = Models.Partial.GraphElement;
+    }
+    private void DisplaySolution()
+    {
         if(VisualizationGlobal.CurrentCanvasGraph is not null)
         {
             var lines = VisualizationGlobal.CurrentCanvasGraph.HandleCommand(GraphModel.Command);
@@ -81,9 +100,7 @@ public class IndexModel : PageModel
             SolutionModel.Command = GraphModel.Command;
             VisualizationGlobal.CurrentPartial = Models.Partial.Solution;
         }
-        return Page();
     }
-
     private void DisplayGraph()
     {
         if(VisualizationGlobal.CurrentCanvasGraph is not null)

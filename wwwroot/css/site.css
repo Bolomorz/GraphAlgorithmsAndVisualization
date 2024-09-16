@@ -87,3 +87,34 @@ body {
   border-bottom: 1px solid #dddddd;
   background-color: #1421d1;
 }
+
+.config {
+  width: 95%;
+  margin: auto;
+  overflow: auto;
+  height: 700px;
+}
+.config table {
+  border-collapse: collapse;
+  width: 100%;
+  color: #ffffff;
+  border: 1px solid #04083b;
+}
+.config thead th {
+  background-color: #04083b;
+  text-align: left;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.config tbody td {
+  text-align: left;
+  padding: 15px;
+}
+.config tbody tr {
+  border-bottom: 1px solid #dddddd;
+  background-color: #1421d1;
+}
+.config input {
+  min-width: 80%;
+}
